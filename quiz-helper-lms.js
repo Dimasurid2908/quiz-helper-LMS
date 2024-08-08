@@ -14,7 +14,7 @@
 
         const style = document.createElement('style');
     style.textContent = `
-    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap');
 
     :root {
         --bg-color: #e0f7fa;
