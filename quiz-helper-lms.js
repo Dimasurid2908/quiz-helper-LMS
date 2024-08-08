@@ -886,12 +886,10 @@ function isValidFreeKey(key) {
     return /^[A-Z0-9]{16}$/.test(key);
 }
 
-// Hàm kiểm tra tính hợp lệ của key premium
 function isValidPremiumKey(key) {
     return validPremiumKeys.includes(key);
 }
 
-// Hàm kích hoạt key premium đã được cập nhật
 function activatePremiumKey() {
     const inputKey = document.getElementById('premiumKeyInput').value;
     if (isValidPremiumKey(inputKey)) {
@@ -913,7 +911,7 @@ function showFunctions(isPremium) {
     const inputs = document.querySelectorAll('#functionsSection input');
 
     buttons.forEach(button => {
-        if (isPremium || ['extractButton', 'selectAnswersButton', 'startTimerButton'].includes(button.id)) {
+        if (isPremium || isFreeFeature(button.id)) {
             button.disabled = false;
             button.onclick = null; // Remove any existing click handlers
         } else {
@@ -941,8 +939,11 @@ function checkKeyValidity() {
     const storedExpirationTime = localStorage.getItem('keyExpirationTime');
 
     if (storedKey === 'PREMIUM') {
+        activeKey = 'PREMIUM';
         showFunctions(true);
     } else if (storedKey === 'FREE' && storedExpirationTime && Date.now() < parseInt(storedExpirationTime)) {
+        activeKey = 'FREE';
+        keyExpirationTime = parseInt(storedExpirationTime);
         showFunctions(false);
     } else {
         // Key expired or not set
@@ -958,6 +959,11 @@ function logout() {
     document.getElementById('keySection').style.display = 'block';
     document.getElementById('functionsSection').style.display = 'none';
     alert('Phiên của bạn đã kết thúc. Vui lòng kích hoạt key để tiếp tục sử dụng.');
+}
+
+// Helper function to check if a feature is available for free users
+function isFreeFeature(id) {
+    return ['extractButton', 'selectAnswersButton', 'startTimerButton', 'playMusicButton', 'openGithubButton', 'startFarmButton'].includes(id);
 }
 
 // Add event listeners
@@ -978,7 +984,6 @@ setInterval(() => {
         alert('Nâng cấp lên Premium ngay để mở khóa tất cả tính năng!');
     }
 }, 180000);
-
 // Helper function to check if a feature is available for free users
 function isFreeFeature(id) {
     return ['extractButton', 'selectAnswersButton', 'startTimerButton', 'playMusicButton', 'openGithubButton', 'startFarmButton'].includes(id);
